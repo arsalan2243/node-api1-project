@@ -4,6 +4,17 @@ const User = require("./users/model")
 const server = express()
 server.use(express.json())
 
+server.delete("/api/users/:id", async (req, res) => {
+  const possibleUser = await User.findById(req.params.id)
+  if (!possibleUser) {
+    res.status(404).json({
+      message: "message: The user with the specified does not exist",
+    })
+  } else {
+    const deleteUser = await User.remove(possibleUser.id)
+    res.status(404).json(deleteUser)
+  }
+})
 server.post("/api/users", (req, res) => {
   const user = req.body
   if (!user.name || !user.bio) {
